@@ -16,7 +16,6 @@ visited = []
 
 
 for i in range(n):
-    new_non_zero = []
     curr_weight, curr_val = l[i]
 
     if curr_weight > k:
@@ -26,14 +25,12 @@ for i in range(n):
         if j + curr_weight > k:
             continue
         dp[j+curr_weight] = max(dp[j+curr_weight], dp[j] + curr_val)
-        new_non_zero.append(j+curr_weight)
+        non_zero.add(j+curr_weight)
 
     dp[curr_weight] = max(dp[curr_weight], curr_val)
 
-    new_non_zero.append(curr_weight)
+    non_zero.add(curr_weight)
 
-    for num in new_non_zero:
-        non_zero.add(num)
     visited = list(non_zero)
     # 내림차순으로 하는 이유? 갱신한 것을 재 참조할 가능성이 있기 때문
     visited.sort(key=lambda x: -x)
