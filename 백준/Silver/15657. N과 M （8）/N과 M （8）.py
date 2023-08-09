@@ -11,14 +11,12 @@ n, m = map(int, input().split())
 A = list(map(int, input().split()))
 A.sort()
 sheet = []
-nums = set()
 
 
 def back(cnt, idx):
     # 기저 사례 삽입
     if cnt == m:
-        if tuple(sheet) not in nums:
-            print(' '.join(map(str, sheet)))
+        print(' '.join(map(str, sheet)))
         return
 
     # 하나씩 뽑기
