@@ -21,8 +21,8 @@ def dfs(i, j, val):
     val += 1
     global ans
     if val == 26:
-        ans = 26
-        return
+        print(val)
+        exit()
     ans = max(ans, val)
     for di, dj in dirs:
         ni, nj = i + di, j + dj
