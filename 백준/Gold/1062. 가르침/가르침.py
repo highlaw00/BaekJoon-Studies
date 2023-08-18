@@ -11,10 +11,13 @@
 # 읽을 수 있다면(N개의 집합에 있는 모든 문자가 고른 문자들의 집합에 존재하는 경우) + 1
 # N개의 집합 모두 대조해보고 ans 갱신
 
-n, k = map(int, input().split())
-words_set = [set(input()) for _ in range(n)]
+import sys
+input = sys.stdin.readline
 
-# 처음부터 a,c,i,n,t 를 넣고 시작할까?
+n, k = map(int, input().rstrip().split())
+words_set = [set(input().rstrip()) for _ in range(n)]
+
+# 처음부터 a,c,i,n,t 를 넣고 시작하기
 sheet = set()
 for char in ('a', 'c', 'i', 'n', 't'):
     sheet.add(char)
@@ -23,14 +26,12 @@ for char in ('a', 'c', 'i', 'n', 't'):
 alphabets = [chr(i) for i in range(ord('a'), ord('z') + 1)]
 ans = 0
 
-# 이렇게 되면 백트래킹을 a,c,i,n,t 제외하고 진행해야함
-
 
 def back(cnt, idx):
     # cnt: 현재 배운 글자의 수
     # idx: 배울 수 있는 글자 중 가장 낮은 인덱스
 
-    # k보다 많이 배우는 경우(k가 5보다 작은 경우)
+    # k보다 많이 배우는 경우 (k가 5보다 작은 경우)
     if cnt > k:
         return
     # 배운 글자 수가 k개
