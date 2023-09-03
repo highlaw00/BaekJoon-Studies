@@ -41,7 +41,6 @@ while icebergs:
     ans += 1
     # 빙하들의 값을 모두 갱신합니다
     temp = []
-    melted = []
     for iceberg in icebergs:
         i, j, sea_cnt = iceberg
         grid[i][j] -= sea_cnt
