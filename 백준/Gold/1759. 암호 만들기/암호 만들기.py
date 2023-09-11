@@ -28,6 +28,7 @@ def back(cnt, idx):
             return
 
         print(''.join(sheet))
+        return
     for i in range(idx, c):
         sheet.append(chars[i])
         back(cnt+1, i+1)
