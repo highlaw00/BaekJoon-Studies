@@ -1,12 +1,10 @@
-word = input()
-ans = ""
+encrypted = input()
+alphabets = [chr(ch) for ch in range(ord('A'), ord('Z') + 1)]
+ans = ['' for _ in range(len(encrypted))]
 
-for char in word:
-    # A, B, C인 경우
-    if "A" <= char <= "C":
-        ans += chr(ord(char) + 23)
-    # A, B, C가 아닌 경우
-    else:
-        ans += chr(ord(char) - 3)
+for i, ch in enumerate(encrypted):
+    decrypted_ch = ((ord(ch) - ord('A')) - 3) % 26
+    decrypted_ch = alphabets[decrypted_ch]
+    ans[i] = decrypted_ch
 
-print(ans)
+print(''.join(ans))
