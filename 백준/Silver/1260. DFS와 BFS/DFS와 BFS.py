@@ -1,58 +1,61 @@
+# DFS: 깊이 우선 탐색
+
+# 1. 그래프를 입력한다.
+# 2. 정점을 방문한다.
+# 3. 연결된 정점 중 방문하지 않은 정점을 탐색한다.
+# 3-1. 만약 없다면 반환한다
+# 3-2. 만약 있다면 해당 정점으로 재귀한다.
+import sys
 from collections import deque
-# 정점의 개수, 간선의 개수, 시작 간선이 주어졌을 때, dfs, bfs의 탐색 과정을 출력하라
+input = sys.stdin.readline
+
 n, m, v = map(int, input().split())
 
-# 우선 그래프부터 입력 받고
-# 그래프를 오름차순으로 정렬하고
-# dfs 수행 결과와 bfs 수행결과 출력
-# 양방향 그래프 => 반대에도 넣어줘야함
-
-g = [[] for _ in range(n+1)]
-
+# graph[i] = 정점 i와 연결된 정점들
+graphs = [[] for _ in range(n+1)]
 for _ in range(m):
-    s, e = map(int, input().split())
-    g[s].append(e)
-    g[e].append(s)
+    s, d = map(int, input().split())
+    graphs[s].append(d)
+    graphs[d].append(s)
 
-for i in range(n+1):
-    g[i].sort()
+# 오름차순으로 방문하기 위해 그래프 정렬
+for i in range(len(graphs)):
+    graphs[i].sort()
 
+visited = [False for _ in range(n+1)]
 
 def dfs(root):
-    global g, visited
-    for next in g[root]:
-        # 방문하지 않은 정점을 방문
-        if not visited[next]:
-            visited[next] = 1
-            print(next, end=' ')
-            dfs(next)
+    global visited, graphs
+    # 방문 처리
+    visited[root] = True
+    print(root, end=" ")
+    # 연결 간선 확인
+    for vertex in graphs[root]:
+        # 방문하지 않은 정점이 있다면 재귀
+        if not visited[vertex]:
+            dfs(vertex)
 
-
-# dfs 수행
-visited = [0 for _ in range(n+1)]
-visited[v] = 1
-print(v, end=' ')
 dfs(v)
-
-
 print()
 
+# bfs: 너비 우선 탐색
 
-def bfs():
-    global q, visited
-    while q:
-        curr = q.popleft()
-        for next in g[curr]:
-            if not visited[next]:
-                visited[next] = 1
-                print(next, end=' ')
-                q.append(next)
+# 1. 현재 정점을 방문한다.
+# 2. 연결된 정점 중 방문하지 않은 정점을 모두 큐에 삽입한다.
+# 3. 큐에 있는 정점을 pop 하며 탐색을 진행
 
-
-# bfs 수행
 q = deque()
-visited = [0 for _ in range(n+1)]
-visited[v] = 1
+visited = [False for _ in range(n+1)]
+
 q.append(v)
-print(v, end=' ')
-bfs()
+while q:
+    root = q.popleft()
+    # 방문한 적이 있다면 스킵
+    if visited[root]:
+        continue
+    visited[root] = True
+    print(root, end=" ")
+    for vertex in graphs[root]:
+        if not visited[vertex]:
+            q.append(vertex)
+
