@@ -1,36 +1,23 @@
-from collections import deque
+# dp[i] = X에서 i로 변환하기 위한 최소 연산 횟수
+# dp[i+n] = min(dp[i+n], dp[i] + 1)
+# dp[i*2] = min(dp[i*2], dp[i] + 1)
+# dp[i*3] = min(dp[i*3], dp[i] + 1)
 import sys
+INT_MAX = sys.maxsize
 
 def solution(x, y, n):
-    # 1. 현재 위치에서 n 더하기
-    # 2. 현재 위치에서 2 곱하기
-    # 3. 현재 위치에서 3 곱하기
-    answer = sys.maxsize
-    visited = [False for _ in range(0, y + 1)]
-    dist = [sys.maxsize for _ in range(0, y + 1)]
-    queue = deque()
-    queue.append(x)
+    dp = [INT_MAX for _ in range(y+1)]
+    dp[x] = 0
     
-    dist[x] = 0
+    for i in range(x, y):
+        if i+n <= y:
+            dp[i+n] = min(dp[i+n], dp[i] + 1)
+        if i*2 <= y:
+            dp[i*2] = min(dp[i*2], dp[i] + 1)
+        if i*3 <= y:
+            dp[i*3] = min(dp[i*3], dp[i] + 1)
     
-    while queue:
-        curr = queue.popleft()
-        if visited[curr]: continue
-        visited[curr] = True
-        # dist[curr + something] = min(dist[curr + something], dist[curr] + 1)
-        # n 더하는 경우
-        if curr + n <= y:
-            dist[curr + n] = min(dist[curr + n], dist[curr] + 1)
-            queue.append(curr + n)
-        if curr * 2 <= y:
-            dist[curr * 2] = min(dist[curr * 2], dist[curr] + 1)
-            queue.append(curr * 2)
-        if curr * 3 <= y:
-            dist[curr * 3] = min(dist[curr * 3], dist[curr] + 1)
-            queue.append(curr * 3)
+    if dp[y] == INT_MAX:
+        return -1
     
-    answer = dist[y]
-    if answer == sys.maxsize:
-        answer = -1
-    
-    return answer
+    return dp[y]
