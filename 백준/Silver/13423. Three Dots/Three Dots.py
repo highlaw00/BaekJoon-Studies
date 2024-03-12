@@ -1,23 +1,24 @@
-from itertools import combinations as cb
 import sys
+input = sys.stdin.readline
 
-t = int(sys.stdin.readline())
-
+t = int(input())
 for _ in range(t):
-    n = int(sys.stdin.readline())
-    dots = list(map(int, sys.stdin.readline().split()))
-    dic = {dots[i]: i for i in range(n)}
-    combi = cb(dots, 2)
+    n = int(input())
+    
+    dots = list(map(int, input().split()))
+    dots.sort()
+    
+    dicts = dict()
+    for num in dots:
+        dicts[num] = True
+        
     ans = 0
-
-    for case in combi:
-        if case[0] < case[1]:
-            x1, x2 = case[0], case[1]
-        else:
-            x1, x2 = case[1], case[0]
-
-        x3 = 2 * x2 - x1
-        if x3 in dic:
-            ans += 1
-
+    for i in range(len(dots) - 1):
+        for j in range(i+1, len(dots)):
+            num1 = dots[i]
+            num2 = dots[j]
+            gap = num2 - num1
+            if (num2 + gap) in dicts:
+                ans += 1
+    
     print(ans)
