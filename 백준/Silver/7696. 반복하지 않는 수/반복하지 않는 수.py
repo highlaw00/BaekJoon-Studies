@@ -1,31 +1,36 @@
-from itertools import permutations, chain
-import sys
+sheet = [0 for _ in range(1_000_001)]
+curr_idx = 1
+nums = [i for i in range(10)]
+visited = [False for _ in range(10)]
 
-# permutation을 list로 안바꾸고 해봅시다...
+def back(cnt, maximum_len, array):
+    global sheet, nums, visited, curr_idx
+    if cnt == maximum_len and curr_idx <= 1_000_000:
+        summation = 0
+        curr_place = 10 ** (maximum_len - 1)
+        for num in array:
+            summation += curr_place * num
+            curr_place = curr_place // 10
+        sheet[curr_idx] = summation
+        curr_idx += 1
+        return
 
-arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-cheat_sheet = []
-unit = 0
-flag = True
-
-while flag:
-    unit += 1
-    candidates = permutations(arr, unit)
-    last_idx = 0
-
-    # 순열에서 0으로 시작하는거 다 거르기
-    for candidate in candidates:
-        if candidate[0] == 0:
+    for i in range(10):
+        if cnt == 0 and i == 0:
             continue
-        new_candidate = ''.join(map(str, candidate))
-        cheat_sheet.append(int(new_candidate))
-        if len(cheat_sheet) >= 1000000:
-            flag = False
-            break
+        if visited[i]: continue
+        array.append(i)
+        visited[i] = True
+        back(cnt + 1, maximum_len, array)
+        visited[i] = False
+        array.pop()
+
+for i in range(1, 11):
+    if curr_idx > 1_000_000: break
+    back(0, i, [])
 
 while True:
-    n = int(sys.stdin.readline())
+    n = int(input())
     if n == 0:
         break
-    print(cheat_sheet[n-1])
+    print(sheet[n])
