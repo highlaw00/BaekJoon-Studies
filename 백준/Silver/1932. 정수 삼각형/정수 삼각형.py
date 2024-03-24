@@ -1,20 +1,21 @@
 n = int(input())
 triangle = [list(map(int, input().split())) for _ in range(n)]
-dp = [[0] * i for i in range(1, n+1)]
+# dp[i][j] = i,j번째 숫자까지 오는 경로 중 선택된 수의 합이 최대인 경로
+dp = [[0 for _ in range(i)] for i in range(1, n+1)]
+
 dp[0][0] = triangle[0][0]
 
-# dp[i][j] = max(dp[i-1][j] + curr, dp[i-1][j-1] + curr)
-# 가장 오른쪽, 가장 왼쪽 예외처리
+# 1,0 ~ n-1,0 채우기
 for i in range(1, n):
-    for j in range(i+1):
-        curr = triangle[i][j]
-        # j가 0일 때 dp[i][j] = dp[i-1][j] + curr
-        if j == 0:
-            dp[i][j] = dp[i-1][j] + curr
-        # j가 i일 때 dp[i][j] = dp[i-1][j-1] + curr
-        elif j == i:
-            dp[i][j] = dp[i-1][j-1] + curr
-        else:
-            dp[i][j] = max(dp[i-1][j] + curr, dp[i-1][j-1] + curr)
+    dp[i][0] = dp[i-1][0] + triangle[i][0]
 
-print(max(dp[-1]))
+# 1,1 ~ n-1, n-1 채우기
+for i in range(1, n):
+    dp[i][i] = dp[i-1][i-1] + triangle[i][i]
+
+if n >= 3:
+    for i in range(2, n):
+        for j in range(1, i):
+            dp[i][j] = max(dp[i-1][j], dp[i-1][j-1]) + triangle[i][j]
+    
+print(max(dp[n-1]))
