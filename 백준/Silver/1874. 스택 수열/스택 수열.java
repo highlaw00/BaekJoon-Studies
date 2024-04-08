@@ -3,6 +3,8 @@ import java.io.*;
 
 public class Main {
     private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private static final StringBuilder sb = new StringBuilder();
+    
     public static void main(String[] args) throws IOException{
         int n = Integer.parseInt(br.readLine());
         Integer[] numbers = new Integer[n];
@@ -10,7 +12,6 @@ public class Main {
             numbers[i] = Integer.parseInt(br.readLine());
         }
 
-        Character[] ops = new Character[2*n];
         Stack<Integer> stack = new Stack<>();
         int opsCnt = 0;
         int nextNumber = 1;
@@ -20,14 +21,14 @@ public class Main {
             if (stack.isEmpty() || stack.peek() != number) {
                 while (nextNumber <= number) {
                     stack.add(nextNumber);
-                    ops[opsCnt] = '+';
+                    sb.append("+\n");
                     opsCnt ++;
                     nextNumber ++;
                 }
             }
             int top = stack.pop();
             if (top == number) {
-                ops[opsCnt] = '-';
+                sb.append("-\n");
                 opsCnt ++;
             } else {
                 isAble = false;
@@ -36,9 +37,7 @@ public class Main {
         }
 
         if (isAble) {
-            for (Character op : ops) {
-                System.out.println(op);
-            }
+            System.out.println(sb);
         } else {
             System.out.println("NO");
         }
