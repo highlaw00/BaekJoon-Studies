@@ -37,7 +37,7 @@ public class Main {
             });
 
             // 0,0 지점부터 dijkstra 탐색
-            // 우선순위 큐에 dist, i, j 저장
+            // 우선순위 큐에 해당 정점까지의 dist, i, j 저장
             pq.add(new int[]{grid[0][0], 0, 0});
 
             // 방문하지 않은 노드들 중 가장 가중치가 적은 노드를 선택
