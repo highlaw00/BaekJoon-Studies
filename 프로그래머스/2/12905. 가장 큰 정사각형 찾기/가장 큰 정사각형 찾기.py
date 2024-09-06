@@ -42,10 +42,24 @@ def solution(board):
             prefix[i][j] = prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1] + board[i][j]
     
     # 가장 큰 정사각형의 가로, 세로 길이를 찾습니다.
+    # 이분 탐색으로 찾습니다.
     answer = 0
-    for i in range(min(n, m), 0, -1):
-        if is_biggest_size(i, prefix):
-            answer = i * i
-            break
+    left = 0
+    right = min(n, m)
+    while left <= right:
+        mid = (left + right) // 2
+        # 정답 후보군이 될 수 있다면, 정답은 mid + 1 ~ right 사이에 존재
+        if is_biggest_size(mid, prefix):
+            answer = mid * mid
+            left = mid + 1
+        # 정답 후보군이 될 수 없으면, 정답은 left ~ mid - 1 사이에 존재
+        else:
+            right = mid - 1
+            
+            
+    # for i in range(min(n, m), 0, -1):
+    #     if is_biggest_size(i, prefix):
+    #         answer = i * i
+    #         break
     
     return answer
