@@ -1,17 +1,13 @@
-n, m = map(int, input().split())
-
-ans = []
-sheet = [i for i in range(n+1)]
-
-
-def back(cnt):
+def back(cnt, stack, arr, m):
     if cnt == m:
-        print(' '.join(map(str, ans)))
+        print(' '.join(map(str, stack)))
         return
-    for i in range(1, n+1):
-        ans.append(i)
-        back(cnt + 1)
-        ans.pop()
+    for i in range(len(arr)):
+        num = arr[i]
+        stack.append(num)
+        back(cnt+1, stack, arr, m)
+        stack.pop()
 
-
-back(0)
+n, m = map(int, input().split())
+arr = [i+1 for i in range(n)]
+back(0, [], arr, m)
