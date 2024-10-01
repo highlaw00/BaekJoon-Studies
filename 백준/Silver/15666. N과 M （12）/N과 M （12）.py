@@ -1,20 +1,21 @@
 n, m = map(int, input().split())
-A = list(map(int, input().split()))
-A.sort()
-sheet = []
-nums = set()
+numbers = sorted(list(map(int, input().split())))
+s = []
+printed = set()
 
-
-def back(cnt, idx):
-    if cnt == m:
-        if tuple(sheet) not in nums:
-            print(' '.join(map(str, sheet)))
-            nums.add(tuple(sheet))
+def back(k):
+    # base condition
+    if len(s) == m:
+        string = ' '.join(map(str, s))
+        if string not in printed:
+            print(string)
+            printed.add(string)
         return
-    for i in range(idx, n):
-        sheet.append(A[i])
-        back(cnt + 1, i)
-        sheet.pop()
-
-
-back(0, 0)
+    
+    for i in range(k, len(numbers)):
+        num = numbers[i]
+        s.append(num)
+        back(i)
+        s.pop()
+    
+back(0)
