@@ -2,7 +2,6 @@ import time
 
 start = time.time()
 n = int(input())
-grid = [[0 for _ in range(n)] for _ in range(n)]
 availability_grid = [[0 for _ in range(n)] for _ in range(n)]
 ans = 0
 
