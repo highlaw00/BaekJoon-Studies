@@ -1,21 +1,16 @@
 n, m = map(int, input().split())
-lis = sorted(list(map(int, input().split())))
-written = {e: False for e in lis}
-ans = []
-
+numbers = sorted(list(map(int, input().split())))
+s = []
 
 def back(cnt):
     if cnt == m:
-        print(' '.join(map(str, ans)))
+        print(' '.join(map(str, s)))
         return
-    for k, v in written.items():
-        # ans에 작성되지 않았다면
-        if not v:
-            ans.append(k)
-            written[k] = True
-            back(cnt+1)
-            written[k] = False
-            ans.pop()
-
-
+    for num in numbers:
+        if num in s:
+            continue
+        s.append(num)
+        back(cnt+1)
+        s.pop()
+        
 back(0)
