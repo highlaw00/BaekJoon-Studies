@@ -1,29 +1,24 @@
-# n개의 자연수와 자연수 m이 주어졌을 때 길이가 m인 수열을 모두 구하는 프로그램
-# n개의 자연수 중에서 m개를 고른 수열
-# 중복되는 수열을 여러번 출력하면 안됨
-
 n, m = map(int, input().split())
-A = list(map(int, input().split()))
-A.sort()
-sheet = []
-idx_sheet = []
-nums = set()
+numbers = sorted(list(map(int, input().split())))
+used = [False for _ in range(len(numbers))]
+printed = set()
+s = []
 
-
-def back(cnt):
-    if cnt == m:
-        if tuple(sheet) not in nums:
-            print(' '.join(map(str, sheet)))
-            nums.add(tuple(sheet))
+def back():
+    if len(s) == m:
+        string = ' '.join(map(str, s))
+        if string not in printed:
+            print(string)
+            printed.add(string)
         return
-    for i in range(n):
-        if idx_sheet and i in idx_sheet:
+    for i in range(len(numbers)):
+        if used[i]:
             continue
-        idx_sheet.append(i)
-        sheet.append(A[i])
-        back(cnt+1)
-        idx_sheet.pop()
-        sheet.pop()
+        num = numbers[i]
+        s.append(num)
+        used[i] = True
+        back()
+        used[i] = False
+        s.pop()
 
-
-back(0)
+back()
