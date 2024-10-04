@@ -1,62 +1,48 @@
 import sys
+INF = sys.maxsize
 
 n, m = map(int, input().split())
-mat = [list(map(int, input().split())) for _ in range(n)]
+board = [list(map(int, input().split())) for _ in range(n)]
+answer = INF
+
+# 백트래킹으로 살려둘 m개의 치킨집 개수를 고른다.
+# 각 집에서 m개의 치킨집과의 거리를 측정한다. <- 메모이제이션
+# dist[(i,j)] = [(i_1,j_1): 1, (i_2,j_2): 2, ...]
+# 위 처럼 각 집에서 모든 치킨집과의 거리를 기록해둔다.
 houses = []
 chickens = []
-dists = []
-
 for i in range(n):
-    for j in range(n):
-        info = mat[i][j]
-        # 모든 집의 인덱스를 저장합니다.
-        if info == 1:
-            houses.append((i, j))
-        elif info == 2:
-            chickens.append((i, j))
+  for j in range(n):
+    if board[i][j] == 1:
+      houses.append((i, j))
+    elif board[i][j] == 2:
+      chickens.append((i, j))
 
-for (x, y) in houses:
-    # 모든 집에 대해 각 치킨 집에 대한 치킨 거리를 구합니다.
-    each_dist = []
-    for (c_x, c_y) in chickens:
-        # 치킨집의 거리를 계산한 후 dists에 삽입합니다.
-        dist = abs(x-c_x) + abs(y-c_y)
-        each_dist.append(dist)
-    dists.append(each_dist)
+house_to_chicken_dist = dict()
+for i_h, j_h in houses:
+  house_to_chicken_dist[(i_h), (j_h)] = dict()
+  dists = house_to_chicken_dist[(i_h), (j_h)]
+  for i_c, j_c in chickens:
+    dists[(i_c,j_c)] = abs(i_h-i_c) + abs(j_h-j_c)
 
-ans = sys.maxsize
-stack = []
-# 백트래킹 과정을 최대 m번 거치며 최소 도시의 치킨 거리를 구합니다.
+# stack: 폐업되지 않을 치킨집 좌표
+def back(stack, k):
+  if len(stack) == m:
+    total_dist = 0
+    for i_h, j_h in houses:
+      min_dist = INF
+      dists = house_to_chicken_dist[(i_h, j_h)]
+      for i_c, j_c in stack:
+        min_dist = min(min_dist, dists[(i_c,j_c)])
+      total_dist += min_dist
+    global answer
+    answer = min(answer, total_dist)
+    return
+  for i in range(k, len(chickens)):
+    chicken = chickens[i]
+    stack.append(chicken)
+    back(stack, i+1)
+    stack.pop()
 
-
-def get_city_score(indices):
-    # indices에 있는 idx번 째 열을 제외한 행렬에서 각 행의 최소 값을 모두 더합니다.
-    city_score = 0
-    for row in dists:
-        minimum = sys.maxsize
-        for i in range(len(row)):
-            if i in indices and row[i] < minimum:
-                minimum = row[i]
-        city_score += minimum
-
-    return city_score
-
-
-def backtrack(idx, cnt):
-    # 기저 사례
-    if cnt == m:
-        return
-    for i in range(idx, len(chickens)):
-        stack.append(i)
-        # stack에 존재하는 치킨집만 남기고 모두 폐업 합니다.
-        # 그 때의 치킨 거리를 구합니다.
-        city_score = get_city_score(stack)
-        global ans
-        if ans > city_score:
-            ans = city_score
-        backtrack(i + 1, cnt + 1)
-        stack.pop()
-
-
-backtrack(0, 0)
-print(ans)
+back([], 0)
+print(answer)
