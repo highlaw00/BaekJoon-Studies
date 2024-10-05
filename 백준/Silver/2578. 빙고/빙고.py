@@ -1,52 +1,59 @@
-grid = [list(map(int, input().split())) for _ in range(5)]
-visited = [[False for _ in range(5)]for _ in range(5)]
-calls = [list(map(int, input().split())) for _ in range(5)]
+import sys
+CHECKED = sys.maxsize
 
-d = dict()
-for i in range(5):
-    for j in range(5):
-        d[grid[i][j]] = (i, j)
+board = [list(map(int, input().split())) for _ in range(5)]
+answers = []
+for _ in range(5):
+    line = list(map(int, input().split()))
+    for num in line:
+        answers.append(num)
 
-cnt = 0
-ans = 0
-isDone = False
-bingo_cnt = 0
-
-for call in calls:
-    for num in call:
-        bingo_cnt = 0
-        cnt += 1
-        i, j = d[num]
-        visited[i][j] = True
-        # visited의 대각과 수직 수평을 조사
-        # 수평
-        for k in range(5):
-            if True == visited[k][0] == visited[k][1] == visited[k][2] == visited[k][3] == visited[k][4]:
-                bingo_cnt += 1
-            if True == visited[0][k] == visited[1][k] == visited[2][k] == visited[3][k] == visited[4][k]:
-                bingo_cnt += 1
-
-        isCrossed = True
-        for k in range(5):
-            if visited[k][k] != True:
-                isCrossed = False
-                break
-        if isCrossed:
+def check_bingo(board):
+    bingo_cnt = 0
+    for i in range(5):
+        # 행 확인
+        checked_cnt = 0
+        for j in range(5):
+            if board[i][j] == CHECKED:
+                checked_cnt += 1
+        if checked_cnt == 5:
             bingo_cnt += 1
-
-        isCrossed = True
-        for k in range(5):
-            if visited[k][4-k] != True:
-                isCrossed = False
-                break
-        if isCrossed:
+            
+        # 열 확인
+        checked_cnt = 0
+        for j in range(5):
+            if board[j][i] == CHECKED:
+                checked_cnt += 1
+        if checked_cnt == 5:
             bingo_cnt += 1
+    
+    # 우하향 대각 확인
+    checked_cnt = 0
+    for i in range(5):
+        if board[i][i] == CHECKED:
+            checked_cnt += 1
+    if checked_cnt == 5:
+        bingo_cnt += 1
+    # 우상향 대각 확인
+    checked_cnt = 0
+    for i in range(5):
+        if board[4-i][i] == CHECKED:
+            checked_cnt += 1
+    if checked_cnt == 5:
+        bingo_cnt += 1
+    
+    if bingo_cnt >= 3:
+        return True
+    return False
 
-        if bingo_cnt >= 3:
-            ans = cnt
-            isDone = True
-            break
-    if isDone:
+for idx, num in enumerate(answers):
+    target_i, target_j = 0, 0
+    for i in range(5):
+        for j in range(5):
+            if board[i][j] == num:
+                target_i, target_j = i, j
+                break
+    board[target_i][target_j] = CHECKED
+    if check_bingo(board):
+        print(idx+1)
         break
-
-print(ans)
