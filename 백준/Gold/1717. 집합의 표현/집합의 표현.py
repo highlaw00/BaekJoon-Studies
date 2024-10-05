@@ -1,36 +1,36 @@
 import sys
-input = sys.stdin.readline
 sys.setrecursionlimit(1_000_000)
+input = sys.stdin.readline
 
 n, m = map(int, input().split())
+# 집합 표현
+sets = [i for i in range(n+1)]
 
-uf = [i for i in range(n+1)]
+# union - find
+def union(a, b):
+  a_parent = find(a)
+  b_parent = find(b)
+  if (a_parent != b_parent):
+    # 부모 노드의 union이 필요
+    sets[a_parent] = b_parent
 
-# union 함수는 x의 조상 노드가 y의 조상 노드를 가리키도록 하는 함수
-# 즉, x의 조상 노드를 찾고, y의 조상 노드를 찾은 뒤
-# uf[x 조상] = y 조상 을 실행한다
-
-
-def union(x, y):
-    x_ancestor, y_ancestor = find(x), find(y)
-    uf[x_ancestor] = y_ancestor
-
-
-def find(x):
-    if x == uf[x]:  # x가 루트 노드인 경우
-        return x    # 루트 노드를 반환
-    root_node = find(uf[x])  # 루트 노드가 아니라면 조상 노드를 재귀적으로 찾는다
-    uf[x] = root_node        # 이후 조상 노드를 현재 노드의 부모 노드로 만든다
-    return root_node
-
+def find(a):
+  # 부모 노드와 본인이 동일할 때
+  if a == sets[a]:
+    return a
+  # 부모 노드가 본인과 다를 때
+  ancestor = find(sets[a])
+  sets[a] = ancestor
+  return ancestor
 
 for _ in range(m):
-    cmd, a, b = map(int, input().split())
-
-    if cmd:
-        if find(a) == find(b):
-            print('yes')
-        else:
-            print('no')
+  x, v1, v2 = map(int, input().split())
+  if x:
+    v1_p = find(v1)
+    v2_p = find(v2)
+    if v1_p == v2_p:
+      print('YES')
     else:
-        union(a, b)
+      print('NO')
+  else:
+    union(v1, v2)
